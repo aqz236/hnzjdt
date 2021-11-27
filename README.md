@@ -5,8 +5,11 @@
 
 #### 目录结构
 -tool [工具目录]
+
     - dealData.py [文本处理]
+    
     - driver.py [操作手]
+    
     - fuzz.py [答案匹配]
     
 -control.py [入口程序]
