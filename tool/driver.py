@@ -48,6 +48,7 @@ def login(userId,passwd,schoolName,tiku):
         sentPage(PHPSESSID,sentData)
     else:
         print(code)
+    # if resp['success'] == 1:
 
 
 
@@ -134,9 +135,10 @@ def ans(queInfo,tiku):
         info = fuzz.simpleMatching(title,tiku,option)
 
         #匹配后的结果
+        # print(queInfo[i])
         if info == None:
             print("查不到第%s题信息"%num)
-
+            # 再查fuzz.simpleMatching(title, tiku, option)
             sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": "B"})
             noneNum+=1
         elif info == []:
@@ -145,8 +147,8 @@ def ans(queInfo,tiku):
             sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": "B"})
             noneNum+=1
         else:
-            print("选项：",option)
-            print("答案：",info[2])
+            # print("选项：",option)
+            print("题库中此题答案：",info[2])
             #模糊对撞
             rightList = fuzz.dataCollision(info[2],option)
             print("匹配得出答案:",rightList)
@@ -157,13 +159,19 @@ def ans(queInfo,tiku):
 
 
             sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": f"{rightList}"})
-
+            # print(sentData)
+        # quesInfo[f"question{num}"].append(info)
+        # print(title)
+        # print(title)
+        # print(queInfo[i])
         num += 1
+    print("sentData数据：",sentData)
     print("一共没查到%s道题，等待作者优化题库"%(noneNum-1))
     return sentData
 #交卷
 def sentPage(PHPSESSID,sentData):
     global paperInfo
+    # newSentData = str(sentData).replace("\'","\"")
     newSentData = dealData.replaceData(str(sentData).replace("\'","\""))
     print("等待15分钟后交卷...")
     for i in range(0, 101):
