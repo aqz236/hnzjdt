@@ -30,7 +30,7 @@ def login(userId,passwd,schoolName,tiku):
                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                'Referer': 'http://exam.hm86.cn/vip/login/login.php', 'Accept-Encoding': 'gzip, deflate',
                'Accept-Language': 'zh-CN,zh;q=0.9'}
-    cookies = {'PHPSESSID': PHPSESSID}
+    cookies = {'PHPSESSID': PHPSESSID} 
 
     data = {'useraccount': strBase64UserId, 'password': strBase64Passwd,'schoolid': shoolId,
             'ssm': strBase64Sms}
