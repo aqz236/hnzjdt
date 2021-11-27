@@ -22,4 +22,4 @@ exe版：
 
 
 #### 题库项目
- (题库项目地址)[https://github.com/aqz236/aqz236-hnzjtk]
+ 题库项目地址 https://github.com/aqz236/aqz236-hnzjtk
