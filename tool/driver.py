@@ -37,7 +37,6 @@ def login(userId,passwd,schoolName,tiku,schoolInfo):
     data = {'useraccount': strBase64UserId, 'password': strBase64Passwd,'schoolid': shoolId,
             'ssm': strBase64Sms}
     html = requests.post(url, headers=headers, verify=False, cookies=cookies, data=data)
-    print(html.text)
     code = re.findall(r'success:(.*?),', html.text, re.I)[0]
     if code == "1":
         print("登录成功")
@@ -51,6 +50,9 @@ def login(userId,passwd,schoolName,tiku,schoolInfo):
         return 1
     else:
         return 3
+
+
+
 
 def getSms(PHPSESSID):
 
@@ -112,7 +114,7 @@ def lookPaper(PHPSESSID,usercodepaperid):
         paperInfo["memberschoolid"] = re.findall(r'memberschoolid=\"(.*?)\"', html.text, re.I)[0]
         paperInfo["membernickname"] = re.findall(r'membernickname=\"(.*?)\"', html.text, re.I)[0]
     except:
-        print("无法开始考试,可能没有开启此学校的答题系统，程序退出")
+        print("无法开始考试,可能没有开启此学校的答题系统")
         exit()
     return html.text
 
@@ -120,6 +122,7 @@ def lookPaper(PHPSESSID,usercodepaperid):
 #答题系统
 def ans(queInfo,tiku):
     print("答题系统接收到了试题信息")
+    # print(queInfo)
     num = 1
     noneNum = 1
     quesInfo = {}
@@ -145,11 +148,11 @@ def ans(queInfo,tiku):
             sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": "B"})
             noneNum+=1
         else:
+            # print("选项：",option)
             print("题库中此题答案：", info[2])
             #模糊对撞 1.3版本双重匹配
             rightList = fuzz.dataCollision(info[2], option, title, tiku)
             print("匹配得出答案:", rightList)
-            #遇到一个单选题逻辑问题，下面暂时写死，有时间再更新代码  下面说法正确的是()。
             if len(info[2]) == 1:
                 if info[2][0] not in option:
                     sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": "B"})
@@ -157,8 +160,8 @@ def ans(queInfo,tiku):
             if len(rightList) == 7:
                 rightList="A,B,C,D"
             sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": f"{rightList}"})
-
         num += 1
+    # print("sentData数据：",sentData)
     print("一共没查到%s道题，等待作者优化题库"%(noneNum-1))
     return sentData
 #交卷
@@ -171,7 +174,6 @@ def sentPage(PHPSESSID,sentData):
         char_num = i // 2  # 打印多少个'*'
         per_str = '\r%s%% : %s\n' % (i, '*' * char_num) if i == 100 else '\r%s%% : %s' % (i, '*' * char_num)
         print(per_str, end='', flush=True)
-
     sms = getSms(PHPSESSID)
     smsBase64 = base64.b64encode(sms.encode())
     strBase64Sms = str(smsBase64).replace("b\'",'').replace('\'','')
@@ -195,6 +197,8 @@ def sentPage(PHPSESSID,sentData):
     }
     html = requests.post(url, headers=headers, verify=False, cookies=cookies, data=data)
     print(html.text)
+    print("执行完毕，你的星星是给我的最大支持")
+    print("项目地址：https://github.com/aqz236/hnzjdt")
 if __name__=='main':
     pass
 
