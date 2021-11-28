@@ -112,7 +112,7 @@ def lookPaper(PHPSESSID,usercodepaperid):
         paperInfo["memberschoolid"] = re.findall(r'memberschoolid=\"(.*?)\"', html.text, re.I)[0]
         paperInfo["membernickname"] = re.findall(r'membernickname=\"(.*?)\"', html.text, re.I)[0]
     except:
-        print("无法开始考试,可能没有开启此学校的答题系统")
+        print("无法开始考试,可能没有开启此学校的答题系统，程序退出")
         exit()
     return html.text
 
@@ -120,7 +120,6 @@ def lookPaper(PHPSESSID,usercodepaperid):
 #答题系统
 def ans(queInfo,tiku):
     print("答题系统接收到了试题信息")
-    # print(queInfo)
     num = 1
     noneNum = 1
     quesInfo = {}
@@ -173,7 +172,6 @@ def sentPage(PHPSESSID,sentData):
         per_str = '\r%s%% : %s\n' % (i, '*' * char_num) if i == 100 else '\r%s%% : %s' % (i, '*' * char_num)
         print(per_str, end='', flush=True)
 
-    print(paperInfo)
     sms = getSms(PHPSESSID)
     smsBase64 = base64.b64encode(sms.encode())
     strBase64Sms = str(smsBase64).replace("b\'",'').replace('\'','')
@@ -195,7 +193,6 @@ def sentPage(PHPSESSID,sentData):
         "membernickname": paperInfo["membernickname"],
         "ssm": strBase64Sms
     }
-    print("看一下发送的data：",data)
     html = requests.post(url, headers=headers, verify=False, cookies=cookies, data=data)
     print(html.text)
 if __name__=='main':
