@@ -182,7 +182,7 @@ def sentPage(PHPSESSID,sentData):
                'Origin': 'http://exam.hm86.cn', 'X-Requested-With': 'XMLHttpRequest',
                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36',
                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-               'Referer': 'http://exam.hm86.cn/web/front/study/examination.php?paperid=1000000001&usercodepaperid=M2T0A2w1N-D1d1f-M2T7AhwmNsDocfwtMTEyNl8xMDAwMDAwMDAx',
+               'Referer': 'http://exam.hm86.cn/web/front/study/examination.php?paperid=1000000001',
                'Accept-Encoding': 'gzip, deflate', 'Accept-Language': 'zh-CN,zh;q=0.9'}
     cookies = {'PHPSESSID': PHPSESSID}
     data = {
