@@ -13,7 +13,7 @@ def simpleMatching(title,tiku,option):
         else:
             pass
     try:
-        #一个题目匹配到多个答案就检查答案存在否
+        #一个题目匹配到多个答案就检查答案存在否 
         for oo in checkList:
             checkAns = tiku[oo]
             if checkAns[0] in option:
