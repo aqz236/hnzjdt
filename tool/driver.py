@@ -52,7 +52,6 @@ def login(userId,passwd,schoolName,tiku,schoolInfo):
     else:
         return 3
 
-
 def getSms(PHPSESSID):
 
     url = 'http://exam.hm86.cn/com/common/appAction.php?action=ssm'
@@ -113,11 +112,10 @@ def lookPaper(PHPSESSID,usercodepaperid):
         paperInfo["memberusercode"] = re.findall(r'memberusercode=\"(.*?)\"', html.text, re.I)[0]
         paperInfo["memberschoolid"] = re.findall(r'memberschoolid=\"(.*?)\"', html.text, re.I)[0]
         paperInfo["membernickname"] = re.findall(r'membernickname=\"(.*?)\"', html.text, re.I)[0]
-        return html.text
-        
     except:
-        print("无法开始考试,可能没有开启此学校的答题系统，程序退出")
+        print("无法开始考试,可能没有开启此学校的答题系统")
         exit()
+    return html.text
 
 
 #答题系统
@@ -129,30 +127,30 @@ def ans(queInfo,tiku):
     quesInfo = {}
     for i in queInfo:
         print("正在匹配第%s道题答案"%num)
-        title = queInfo[i][1].split("、")[1]
+        titleNumber = queInfo[i][1].split("、")[0]
+        title = queInfo[i][1].replace(titleNumber+"、",'')
         quesInfo[f"question{num}"] = []
         needAnswerCount = queInfo[i][2]
         option = queInfo[i][3]
         info = fuzz.simpleMatching(title,tiku,option)
 
         #匹配后的结果
-        # print(queInfo[i])
         if info == None:
-            print("查不到第%s题信息"%num)
+            print("None查不到第%s题信息"%num)
+            print(title)
             # 再查fuzz.simpleMatching(title, tiku, option)
             sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": "B"})
             noneNum+=1
         elif info == []:
-            print("查不到第%s题信息"%num)
-
+            print("[]查不到第%s题信息"%num)
+            print(title)
             sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": "B"})
             noneNum+=1
         else:
-            # print("选项：",option)
-            print("题库中此题答案：",info[2])
-            #模糊对撞
-            rightList = fuzz.dataCollision(info[2],option)
-            print("匹配得出答案:",rightList)
+            print("题库中此题答案：", info[2])
+            #模糊对撞 1.3版本双重匹配
+            rightList = fuzz.dataCollision(info[2], option, title, tiku)
+            print("匹配得出答案:", rightList)
             #遇到一个单选题逻辑问题，下面暂时写死，有时间再更新代码  下面说法正确的是()。
             if len(info[2]) == 1:
                 if info[2][0] not in option:
@@ -161,13 +159,7 @@ def ans(queInfo,tiku):
             if len(rightList) == 7:
                 rightList="A,B,C,D"
             sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": f"{rightList}"})
-            # print(sentData)
-        # quesInfo[f"question{num}"].append(info)
-        # print(title)
-        # print(title)
-        # print(queInfo[i])
         num += 1
-    # print("sentData数据：",sentData)
     print("一共没查到%s道题，等待作者优化题库"%(noneNum-1))
     return sentData
 #交卷
@@ -182,7 +174,6 @@ def sentPage(PHPSESSID,sentData):
         per_str = '\r%s%% : %s\n' % (i, '*' * char_num) if i == 100 else '\r%s%% : %s' % (i, '*' * char_num)
         print(per_str, end='', flush=True)
 
-    print(paperInfo)
     sms = getSms(PHPSESSID)
     smsBase64 = base64.b64encode(sms.encode())
     strBase64Sms = str(smsBase64).replace("b\'",'').replace('\'','')
@@ -204,7 +195,6 @@ def sentPage(PHPSESSID,sentData):
         "membernickname": paperInfo["membernickname"],
         "ssm": strBase64Sms
     }
-    print("看一下发送的data：",data)
     html = requests.post(url, headers=headers, verify=False, cookies=cookies, data=data)
     print(html.text)
 if __name__=='main':
