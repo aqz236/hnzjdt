@@ -114,8 +114,9 @@ def lookPaper(PHPSESSID,usercodepaperid):
         paperInfo["memberschoolid"] = re.findall(r'memberschoolid=\"(.*?)\"', html.text, re.I)[0]
         paperInfo["membernickname"] = re.findall(r'membernickname=\"(.*?)\"', html.text, re.I)[0]
     except:
-        print("无法开始考试,可能没有开启此学校的答题系统")
-        exit()
+        print("无法开始考试，可能原因：")
+        print("1、网站暂未开启该学校的考试系统【如何验证：去网站登录页面看学校选择框里是否在里面】")
+        print("如何修复：请前往https://github.com/aqz236/hnzjdt提交issues")
     return html.text
 
 
@@ -138,21 +139,32 @@ def ans(queInfo,tiku):
 
         #匹配后的结果
         if info == None:
+            print("*************************************************")
             print("None查不到第%s题信息"%num)
+            print("此题查不到，希望可以前往https://github.com/aqz236/hnzjdt提交issues，下面是这个题的题目")
             print(title)
+            print("下面是这题的选项")
+            print(option)
+            print("*************************************************")
+
             sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": "B"})
             noneNum+=1
         elif info == []:
             print("[]查不到第%s题信息"%num)
+            print("此题查不到，希望可以前往https://github.com/aqz236/hnzjdt提交issues，下面是这个题的题目")
+
             print(title)
             sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": "B"})
             noneNum+=1
         else:
             # print("选项：",option)
-            print("题库中此题答案：", info[2])
             #模糊对撞 1.3版本双重匹配
+            print(title)
+            
             rightList = fuzz.dataCollision(info[2], option, title, tiku)
+            print("题库中此题答案：", info[2])
             print("匹配得出答案:", rightList)
+            print("选项已自动排序")
             if len(info[2]) == 1:
                 if info[2][0] not in option:
                     sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": "B"})
@@ -163,6 +175,7 @@ def ans(queInfo,tiku):
         num += 1
     # print("sentData数据：",sentData)
     print("一共没查到%s道题，等待作者优化题库"%(noneNum-1))
+    print("希望可以前往https://github.com/aqz236/hnzjdt提交issues，协助作者更新题库")
     return sentData
 #交卷
 def sentPage(PHPSESSID,sentData):
@@ -170,10 +183,11 @@ def sentPage(PHPSESSID,sentData):
     newSentData = dealData.replaceData(str(sentData).replace("\'","\""))
     print("等待15分钟后交卷...")
     for i in range(0, 101):
-        time.sleep(9)
         char_num = i // 2  # 打印多少个'*'
         per_str = '\r%s%% : %s\n' % (i, '*' * char_num) if i == 100 else '\r%s%% : %s' % (i, '*' * char_num)
         print(per_str, end='', flush=True)
+        time.sleep(9)
+
     sms = getSms(PHPSESSID)
     smsBase64 = base64.b64encode(sms.encode())
     strBase64Sms = str(smsBase64).replace("b\'",'').replace('\'','')
