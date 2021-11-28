@@ -22,7 +22,6 @@ def simpleMatching(title,tiku,option):
         # checkedTitle = max(checkList, key=checkList.get)
     except:
         pass
-
 #数据对撞
 def dataCollision(ansList, quesList, title, tiku):
     #多选
