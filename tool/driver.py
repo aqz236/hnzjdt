@@ -113,10 +113,11 @@ def lookPaper(PHPSESSID,usercodepaperid):
         paperInfo["memberusercode"] = re.findall(r'memberusercode=\"(.*?)\"', html.text, re.I)[0]
         paperInfo["memberschoolid"] = re.findall(r'memberschoolid=\"(.*?)\"', html.text, re.I)[0]
         paperInfo["membernickname"] = re.findall(r'membernickname=\"(.*?)\"', html.text, re.I)[0]
+        return html.text
+        
     except:
-        print("无法开始考试,可能没有开启此学校的答题系统")
+        print("无法开始考试,可能没有开启此学校的答题系统，程序退出")
         exit()
-    return html.text
 
 
 #答题系统
