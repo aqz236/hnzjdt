@@ -37,7 +37,6 @@ if __name__ == "__main__":
         code = 0
         if code == 1:
             print("执行完成")
-            exit()
         elif code == 2:
             print("学校信息不存在，请手动添加学校学校或者联系作者")
         elif code == 3:
