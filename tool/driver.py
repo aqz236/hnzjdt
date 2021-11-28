@@ -63,7 +63,6 @@ def getSms(PHPSESSID):
                'Accept-Language': 'zh-CN,zh;q=0.9'}
     cookies = {"PHPSESSID":PHPSESSID}
     html = requests.post(url, headers=headers, verify=False, cookies=cookies)
-    # print(len(html.text))
     return html.text
 
 def getSession():
@@ -120,11 +119,12 @@ def lookPaper(PHPSESSID,usercodepaperid):
 
 #答题系统
 def ans(queInfo,tiku):
-    print("答题系统接收到了试题信息 如下")
-    print(queInfo)
+    print("答题系统接收到了试题信息")
+    # print(queInfo)
     num = 1
     noneNum = 1
     quesInfo = {}
+
     for i in queInfo:
         print("正在匹配第%s道题答案"%num)
         titleNumber = queInfo[i][1].split("、")[0]
@@ -138,7 +138,6 @@ def ans(queInfo,tiku):
         if info == None:
             print("None查不到第%s题信息"%num)
             print(title)
-            # 再查fuzz.simpleMatching(title, tiku, option)
             sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": "B"})
             noneNum+=1
         elif info == []:
@@ -159,13 +158,13 @@ def ans(queInfo,tiku):
             if len(rightList) == 7:
                 rightList="A,B,C,D"
             sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": f"{rightList}"})
+
         num += 1
     print("一共没查到%s道题，等待作者优化题库"%(noneNum-1))
     return sentData
 #交卷
 def sentPage(PHPSESSID,sentData):
     global paperInfo
-    # newSentData = str(sentData).replace("\'","\"")
     newSentData = dealData.replaceData(str(sentData).replace("\'","\""))
     print("等待15分钟后交卷...")
     for i in range(0, 101):
@@ -174,6 +173,7 @@ def sentPage(PHPSESSID,sentData):
         per_str = '\r%s%% : %s\n' % (i, '*' * char_num) if i == 100 else '\r%s%% : %s' % (i, '*' * char_num)
         print(per_str, end='', flush=True)
 
+    print(paperInfo)
     sms = getSms(PHPSESSID)
     smsBase64 = base64.b64encode(sms.encode())
     strBase64Sms = str(smsBase64).replace("b\'",'').replace('\'','')
@@ -195,6 +195,7 @@ def sentPage(PHPSESSID,sentData):
         "membernickname": paperInfo["membernickname"],
         "ssm": strBase64Sms
     }
+    print("看一下发送的data：",data)
     html = requests.post(url, headers=headers, verify=False, cookies=cookies, data=data)
     print(html.text)
 if __name__=='main':
