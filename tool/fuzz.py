@@ -101,11 +101,6 @@ def dataCollision2(ansList, quesDic, title, tiku, quesList):
                         if like > 88:
                             rightKeyList.append(ii)
                 return rightKeyList
-
-            else:
-                #正常是到不了这里的，如果题库更新 防止找不到题目就默认返回[A,B,C,D]
-                rightKeyList = ["A","B","C","D"]
-                return rightKeyList
         else:
             pass
 
