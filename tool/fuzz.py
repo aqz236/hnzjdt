@@ -32,7 +32,6 @@ def dataCollision(ansList, quesList, title, tiku):
     for i in quesList:
         quesDic[xuanxiang[num]] = i
         num+=1
-    print("看一下此题选项列表:",quesDic)
     if len(ansList) > 1:
         rightList = dataCollision2(ansList, quesDic, title, tiku, quesList)
         print("rightList::",rightList)
@@ -94,9 +93,6 @@ def dataCollision2(ansList, quesDic, title, tiku, quesList):
             for item in quesDic:
                 quesDicToList.append(quesDic[item])
             answerLike = fuzz.ratio(','.join(set(ansList)), ','.join(set(quesDicToList)))
-            print("答案相似度",answerLike)
-            print(ansList)
-            print(quesDicToList)
             if answerLike > 45:
                 #数据对撞
                 rightKeyList = []
