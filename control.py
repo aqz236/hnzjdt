@@ -4,7 +4,8 @@ import tool.driver as driver
 import requests,json
 info = {
     "题库": {},
-    "学校信息": {}
+    "学校信息": {},
+    "最新消息":{}
 }
 
 #获取最新题库和学校信息
@@ -18,7 +19,8 @@ def getInfo():
     schoolInfos = json.loads(requests.get(schoolInfoURL).text.replace("\'","\""))
     info["学校信息"] = schoolInfos["data"]
     print("学校信息获取完成, 最近更新时间：", schoolInfos["updatetime"])
-
+    info["最新消息"] = schoolInfos["msg"]
+    print(info["最新消息"])
 
 def run(schoolName,userId,userPasswd):
     code = driver.login(userId,userPasswd,schoolName,info["题库"],info["学校信息"])
@@ -37,6 +39,7 @@ if __name__ == "__main__":
         code = 0
         if code == 1:
             print("执行完成")
+            exit()
         elif code == 2:
             print("学校信息不存在，请手动添加学校学校或者联系作者")
         elif code == 3:
