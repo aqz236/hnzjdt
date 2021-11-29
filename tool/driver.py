@@ -8,6 +8,7 @@ PHPSESSID = ''
 sentData = []
 paperInfo = {}
 
+
 #模拟登录
 def login(userId,passwd,schoolName,tiku,schoolInfo):
     global PHPSESSID
@@ -123,7 +124,6 @@ def lookPaper(PHPSESSID,usercodepaperid):
 #答题系统
 def ans(queInfo,tiku):
     print("答题系统接收到了试题信息")
-    # print(queInfo)
     num = 1
     noneNum = 1
     quesInfo = {}
@@ -137,45 +137,35 @@ def ans(queInfo,tiku):
         option = queInfo[i][3]
         info = fuzz.simpleMatching(title,tiku,option)
 
-        #匹配后的结果
-        if info == None:
-            print("*************************************************")
-            print("None查不到第%s题信息"%num)
-            print("此题查不到，希望可以前往https://github.com/aqz236/hnzjdt提交issues，下面是这个题的题目")
-            print(title)
-            print("下面是这题的选项")
-            print(option)
-            print("*************************************************")
 
+
+        #匹配后的结果
+        # print(queInfo[i])
+        if info == None:
+            print("None查不到第%s题信息"%num)
+            print("这题的题目:",title)
+            print("这题的选项:",option)
+            # 再查fuzz.simpleMatching(title, tiku, option)
             sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": "B"})
             noneNum+=1
+
         elif info == []:
             print("[]查不到第%s题信息"%num)
-            print("此题查不到，希望可以前往https://github.com/aqz236/hnzjdt提交issues，下面是这个题的题目")
-
             print(title)
             sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": "B"})
             noneNum+=1
         else:
             # print("选项：",option)
-            #模糊对撞 1.3版本双重匹配
-            print(title)
-            
-            rightList = fuzz.dataCollision(info[2], option, title, tiku)
-            print("题库中此题答案：", info[2])
-            print("匹配得出答案:", rightList)
-            print("选项已自动排序")
-            if len(info[2]) == 1:
-                if info[2][0] not in option:
-                    sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": "B"})
-            #临时修的bug 如果是全选题全队 提交的空  这里重新赋值修bug  具体问题懒得看了 记得是改fuzz多选那部分后出来的bug
-            if len(rightList) == 7:
-                rightList="A,B,C,D"
+            rightList = fuzz.dataCollision(info, option, title, tiku)
+            print("题目：", title)
+            print("题库中此题答案：", info)
+            print("匹配得出答案：", rightList)
             sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": f"{rightList}"})
         num += 1
-    # print("sentData数据：",sentData)
-    print("一共没查到%s道题，等待作者优化题库"%(noneNum-1))
-    print("希望可以前往https://github.com/aqz236/hnzjdt提交issues，协助作者更新题库")
+    if noneNum-1 == 0:
+        print("☆*: .｡. o(≧▽≦)o .｡.:*☆全部匹配成功")
+    else:
+        print("一共没查到%s道题，等待作者优化题库"%(noneNum-1))
     return sentData
 #交卷
 def sentPage(PHPSESSID,sentData):
@@ -183,11 +173,12 @@ def sentPage(PHPSESSID,sentData):
     newSentData = dealData.replaceData(str(sentData).replace("\'","\""))
     print("等待15分钟后交卷...")
     for i in range(0, 101):
+        time.sleep(9)
         char_num = i // 2  # 打印多少个'*'
         per_str = '\r%s%% : %s\n' % (i, '*' * char_num) if i == 100 else '\r%s%% : %s' % (i, '*' * char_num)
         print(per_str, end='', flush=True)
-        time.sleep(9)
 
+    print(paperInfo)
     sms = getSms(PHPSESSID)
     smsBase64 = base64.b64encode(sms.encode())
     strBase64Sms = str(smsBase64).replace("b\'",'').replace('\'','')
@@ -209,10 +200,9 @@ def sentPage(PHPSESSID,sentData):
         "membernickname": paperInfo["membernickname"],
         "ssm": strBase64Sms
     }
+    #print("newSentData":newSentData)
     html = requests.post(url, headers=headers, verify=False, cookies=cookies, data=data)
     print(html.text)
-    print("执行完毕，你的星星是给我的最大支持")
-    print("项目地址：https://github.com/aqz236/hnzjdt")
 if __name__=='main':
     pass
 
