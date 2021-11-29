@@ -3,24 +3,16 @@ def simpleMatching(title,tiku,option):
     num = 1
     dataList = []
     checkList = {}
-    #一个标题可能搜到多个答案，进行相似度比对
-    like = 0
-    for i in tiku:
-        like = fuzz.ratio(title, i)
-        #题目相似度
-        if like >68:
-            checkList[i] = like
-        else:
-            pass
     try:
-        #一个题目匹配到多个答案就检查答案存在否 
-        for oo in checkList:
-            checkAns = tiku[oo]
-            if checkAns[0] in option:
-                return [oo, like, checkAns]
-        # checkedTitle = max(checkList, key=checkList.get)
+        tikuAnswerList = tiku[title]#保证这个题目题库里有 且字符完全匹配 得到此题题库答案列表
+        return tikuAnswerList
     except:
-        pass
+        print("*************************************************")
+        print("此题查不到，希望可以前往https://github.com/aqz236/hnzjdt提交issues，下面是这个题的题目")
+        print(title)
+        print("下面是这题的选项")
+        print(option)
+        print("*************************************************")
 
 #数据对撞
 def dataCollision(ansList, quesList, title, tiku):
@@ -32,15 +24,18 @@ def dataCollision(ansList, quesList, title, tiku):
     for i in quesList:
         quesDic[xuanxiang[num]] = i
         num+=1
-    print("看一下此题选项列表:",quesDic)
+    print("此题选项：",quesDic)
     if len(ansList) > 1:
         rightList = dataCollision2(ansList, quesDic, title, tiku, quesList)
-        print("rightList::",rightList)
-        return ','.join(set(rightList))
+        delReDataList = list(set(rightList))
+        delReDataList.sort()
+        return  ','.join(delReDataList)
     #单选
     elif len(ansList) == 1:
         rightList = dataCollision1(ansList,quesList)
-        return ','.join(set(rightList))
+        delReDataList = list(set(rightList))
+        delReDataList.sort()
+        return ','.join(delReDataList)
     else:
         print("答案选择器出错")
 #单选
@@ -85,5 +80,6 @@ def dataCollision2(ansList, quesDic, title, tiku, quesList):
         return ['A','B','C','D']
     return rightKeyList
 
+   
 
 
