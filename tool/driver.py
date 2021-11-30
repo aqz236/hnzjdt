@@ -157,10 +157,17 @@ def ans(queInfo,tiku):
         else:
             # print("选项：",option)
             rightList = fuzz.dataCollision(info, option, title, tiku)
-            print("题目：", title)
-            print("题库中此题答案：", info)
-            print("匹配得出答案：", rightList)
-            sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": f"{rightList}"})
+            if rightList == '' or rightList ==None or rightList == "":
+                print("--------------------------------------------------")
+                print("此题查不到，默认选了A 希望可以前往https://github.com/aqz236/hnzjdt提交issues，下面是这个题的题目")
+                sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": "A"})
+                print("--------------------------------------------------")
+                noneNum += 1
+            else:
+                print("题目：", title)
+                print("题库中此题答案：", info)
+                print("匹配得出答案：", rightList)
+                sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": f"{rightList}"})
         num += 1
     if noneNum-1 == 0:
         print("☆*: .｡. o(≧▽≦)o .｡.:*☆全部匹配成功")
