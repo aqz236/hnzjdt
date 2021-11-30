@@ -1,4 +1,4 @@
-打开【河南省大学生中国特色社会主义民族宗教理论知识竞赛系统_files】文件夹，找到getmembers.js这个文件
+打开【河南省大学生中国特色社会主义民族宗教理论知识竞赛系统_files】文件夹，找到examination.js这个文件
 
 修改第161行 
       alert("兽兽您的得分为95分,流水号：10047"+randomStr+",提交时间："+ currentFormatDate)
