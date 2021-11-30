@@ -27,6 +27,7 @@ def run(schoolName,userId,userPasswd):
     return code
 
 if __name__ == "__main__":
+    print("当前版本：1.6")
     getInfo()
     while True:
         schoolName = input("请输入学校名称(Enter键入以下一步)：")
