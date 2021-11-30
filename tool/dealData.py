@@ -28,7 +28,7 @@ def getQuestionList(src_html):
     print("处理完成")
     return queInfo
 
-#选项重新排列
+#选项重新排列 
 def replaceData(data):
     newData = str(data).replace("B,A","A,B").replace("C,A","A,C").replace("D,A","A,D").replace("A,C,B","A,B,C") \
         .replace("B,A,C", "A,B,C").replace("B,C,A","A,B,C").replace("B,A,D","A,B,D").replace("B,D,A","A,B,D") \
