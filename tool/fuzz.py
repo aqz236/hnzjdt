@@ -38,6 +38,7 @@ def dataCollision(ansList, quesList, title, tiku):
         return ','.join(delReDataList)
     else:
         print("答案选择器出错")
+        
 #单选
 def dataCollision1(ansList,quesList):
     num = 1
