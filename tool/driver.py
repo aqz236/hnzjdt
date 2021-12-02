@@ -93,8 +93,15 @@ def createPaper(PHPSESSID):
     cookies = {'PHPSESSID': PHPSESSID}
 
     html = requests.get(url, headers=headers, verify=False, cookies=cookies)
-    print('试卷创建完成', html.text.split("usercodepaperid=")[1].split("\"")[0])
-    return html.text.split("usercodepaperid=")[1].split("\"")[0]
+
+    # print('试卷创建完成', html.text.split("usercodepaperid=")[1].split("\"")[0])
+    try:
+        usercodepaperid = re.findall(r'usercodepaperid=(.*?)>', html.text, re.I)[0].replace("\'","").replace("\"",'')
+        print("试卷创建完成",usercodepaperid)
+    except Exception as e:
+        print("获取usercodepaperid失败，2021-12-02 v1.62")
+
+    return usercodepaperid
 
 #查看试卷
 def lookPaper(PHPSESSID,usercodepaperid):
@@ -165,8 +172,9 @@ def ans(queInfo,tiku):
                 noneNum += 1
             else:
                 print("题目：", title)
+                print("选项：",option)
                 print("题库中此题答案：", info)
-                print("匹配得出答案：", rightList)
+                print("匹配得出：", rightList)
                 sentData.append({"orderindex": f"{num}", "topicid": f"{queInfo[i][0]}", "result": f"{rightList}"})
         num += 1
     if noneNum-1 == 0:
