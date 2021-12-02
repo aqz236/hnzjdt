@@ -21,11 +21,9 @@ def login(userId,passwd,schoolName,tiku,schoolInfo):
     userIdBase64 = base64.b64encode(userId.encode())
     passwdBase64 = base64.b64encode(passwd.encode())
     smsBase64 = base64.b64encode(sms.encode())
-
     strBase64UserId = str(userIdBase64).replace("b\'",'').replace('\'','')
     strBase64Passwd = str(passwdBase64).replace("b\'",'').replace('\'','')
     strBase64Sms = str(smsBase64).replace("b\'",'').replace('\'','')
-
     url = 'http://exam.hm86.cn/vip/login/loginAction.php?action=login'
     headers = {'Host': 'exam.hm86.cn', 'Connection': 'keep-alive', 'Content-Length': '132', 'Accept': '*/*',
                'Origin': 'http://exam.hm86.cn', 'X-Requested-With': 'XMLHttpRequest',
@@ -99,8 +97,8 @@ def createPaper(PHPSESSID):
         usercodepaperid = re.findall(r'usercodepaperid=(.*?)>', html.text, re.I)[0].replace("\'","").replace("\"",'')
         print("试卷创建完成",usercodepaperid)
     except Exception as e:
+        createPaper(PHPSESSID)#获取不到usercodepaperid就一直获取
         print("获取usercodepaperid失败，2021-12-02 v1.62")
-
     return usercodepaperid
 
 #查看试卷
