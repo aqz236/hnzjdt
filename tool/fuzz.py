@@ -24,7 +24,7 @@ def dataCollision(ansList, quesList, title, tiku):
     for i in quesList:
         quesDic[xuanxiang[num]] = i
         num+=1
-    print("此题选项：",quesDic)
+    # print("此题选项：",quesDic)
     if len(ansList) > 1:
         rightList = dataCollision2(ansList, quesDic, title, tiku, quesList)
         delReDataList = list(set(rightList))
