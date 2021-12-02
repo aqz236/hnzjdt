@@ -1,0 +1,6 @@
+.top{background:#DE0202;}
+.top .con{width:1200px;margin:0px auto;}
+.top .con .left{width:800px;height:120px;float:left;}
+.top .con .left .title{line-height:80px;margin:20px 0;font-size:36px;color:#FFFFFF;}
+.top .con .right{width:400px;height:120px;float:left;}
+.page_main{width:1200px;margin:20px auto;padding: 0px 0px 20px 0px;background: #ffffff;font-family: "微软雅黑";border: 0px solid #e0e0e0;}
