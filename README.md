@@ -5,7 +5,8 @@
 更新内容：
 
        1、题库修正了5道题
-
+       2、得分页面部署到了GithubPage上，在线生成得分页面，网址如下【还是推荐用本地版本自己搞，这种在线的弹框带域名】
+[https://aqz236.github.io/hnzjHTML/](https://aqz236.github.io/hnzjHTML/)
        
 
 ### 最近更新 2021-12-02     V1.7
